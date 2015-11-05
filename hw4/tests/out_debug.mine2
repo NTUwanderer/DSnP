@@ -1,0 +1,116 @@
+mtest> mtn 10
+Calling alloc...(44)
+Calling MemMgr::getMem...(44)
+Memory acquired... 0x139edf0
+Calling alloc...(44)
+Calling MemMgr::getMem...(44)
+Memory acquired... 0x139ee20
+Calling alloc...(44)
+Calling MemMgr::getMem...(44)
+Memory acquired... 0x139ee50
+Calling alloc...(44)
+Calling MemMgr::getMem...(44)
+Memory acquired... 0x139ee80
+Calling alloc...(44)
+Calling MemMgr::getMem...(44)
+Memory acquired... 0x139eeb0
+Calling alloc...(44)
+Calling MemMgr::getMem...(44)
+Memory acquired... 0x139eee0
+Calling alloc...(44)
+Calling MemMgr::getMem...(44)
+Memory acquired... 0x139ef10
+Calling alloc...(44)
+Calling MemMgr::getMem...(44)
+Memory acquired... 0x139ef40
+Calling alloc...(44)
+Calling MemMgr::getMem...(44)
+Memory acquired... 0x139ef70
+Calling alloc...(44)
+Calling MemMgr::getMem...(44)
+Memory acquired... 0x139efa0
+
+mtest> mtn 5 -a 256
+Calling allocArr...(11272)
+Calling MemMgr::getMem...(11272)
+getMemRecycleList: 0x13b5830
+Memory acquired... 0x139efd0
+Calling allocArr...(11272)
+Calling MemMgr::getMem...(11272)
+Already exist: 1th
+Memory acquired... 0x13a1bd8
+Calling allocArr...(11272)
+Calling MemMgr::getMem...(11272)
+Already exist: 1th
+Memory acquired... 0x13a47e0
+Calling allocArr...(11272)
+Calling MemMgr::getMem...(11272)
+Already exist: 1th
+Memory acquired... 0x13a73e8
+Calling allocArr...(11272)
+Calling MemMgr::getMem...(11272)
+Already exist: 1th
+Memory acquired... 0x13a9ff0
+
+mtest> mtn 5 -a 512
+Calling allocArr...(22536)
+Calling MemMgr::getMem...(22536)
+getMemRecycleList: 0x13b57c0
+Recycling 0x13acbf8 to _recycleList[197]
+New MemBlock... 0x13b58e0
+Memory acquired... 0x13b5910
+Calling allocArr...(22536)
+Calling MemMgr::getMem...(22536)
+Already exist: 2th
+Memory acquired... 0x13bb118
+Calling allocArr...(22536)
+Calling MemMgr::getMem...(22536)
+Already exist: 2th
+Recycling 0x13c0920 to _recycleList[464]
+getMemRecycleList: 0x13b57e0
+New MemBlock... 0x13c5920
+Memory acquired... 0x13c5950
+Calling allocArr...(22536)
+Calling MemMgr::getMem...(22536)
+Already exist: 2th
+Memory acquired... 0x13cb158
+Calling allocArr...(22536)
+Calling MemMgr::getMem...(22536)
+Already exist: 2th
+Recycling 0x13d0960 to _recycleList[464]
+Already exist: 1th
+New MemBlock... 0x13d5960
+Memory acquired... 0x13d5990
+
+mtest> mtd -i 7 -a
+Calling freeArr...(0x13c5950)
+>> Array size = 512
+Recycling 0x13c5950 to _recycleList[512]
+Already exist: 2th
+
+mtest> mtd -i 0 -a
+Calling freeArr...(0x139efd0)
+>> Array size = 256
+Recycling 0x139efd0 to _recycleList[256]
+Already exist: 1th
+
+mtest> mtp
+=========================================
+=              Memory Manager           =
+=========================================
+* Block size            : 65536 Bytes
+* Number of blocks      : 4
+* Free mem in last block: 43000
+* Recycle list          : 
+[256] = 1         [512] = 1         [197] = 1         [464] = 2         
+
+=========================================
+=             class MemTest             =
+=========================================
+Object list ---
+oooooooooo
+Array list ---
+xooooooxoo
+
+mtest> q -f
+

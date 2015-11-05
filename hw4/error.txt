@@ -1,0 +1,57 @@
+Checking mem...
+> compiling: memTest.cpp
+> compiling: memCmd.cpp
+Building libmem.a...
+Checking util...
+> compiling: myString.cpp
+> compiling: myGetChar.cpp
+> compiling: util.cpp
+Building libutil.a...
+Checking main...
+> compiling: main.cpp
+> building memTest...
+main.o: In function `main':
+/home/harvey/Desktop/DSnP/hw4/src/main/main.cpp:44: undefined reference to `CmdParser::openDofile(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+../../lib/libcmd.a(cmdCommon.o): In function `HistoryCmd::exec(std::string const&)':
+cmdCommon.cpp:(.text+0x479): undefined reference to `myStr2Int(std::string const&, int&)'
+../../lib/libcmd.a(cmdCommon.o): In function `QuitCmd::exec(std::string const&)':
+cmdCommon.cpp:(.text+0x659): undefined reference to `myStrNCmp(std::string const&, std::string const&, unsigned int)'
+cmdCommon.cpp:(.text+0x6e0): undefined reference to `myStrNCmp(std::string const&, std::string const&, unsigned int)'
+../../lib/libcmd.a(cmdCommon.o): In function `UsageCmd::exec(std::string const&)':
+cmdCommon.cpp:(.text+0x1188): undefined reference to `myStrNCmp(std::string const&, std::string const&, unsigned int)'
+cmdCommon.cpp:(.text+0x11dc): undefined reference to `myStrNCmp(std::string const&, std::string const&, unsigned int)'
+cmdCommon.cpp:(.text+0x13df): undefined reference to `myStrNCmp(std::string const&, std::string const&, unsigned int)'
+../../lib/libcmd.a(cmdParser.o): In function `CmdExec::lexSingleOption(std::string const&, std::string&, bool) const':
+cmdParser.cpp:(.text+0x7b1): undefined reference to `myStrGetTok(std::string const&, std::string&, unsigned long, char)'
+../../lib/libcmd.a(cmdParser.o): In function `CmdExec::lexOptions(std::string const&, std::vector<std::string, std::allocator<std::string> >&, unsigned long) const':
+cmdParser.cpp:(.text+0x246e): undefined reference to `myStrGetTok(std::string const&, std::string&, unsigned long, char)'
+cmdParser.cpp:(.text+0x2499): undefined reference to `myStrGetTok(std::string const&, std::string&, unsigned long, char)'
+../../lib/libmem.a(memCmd.o): In function `initMemCmd()':
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:22: undefined reference to `CmdParser::regCmd(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int, CmdExec*)'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:23: undefined reference to `CmdParser::regCmd(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int, CmdExec*)'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:24: undefined reference to `CmdParser::regCmd(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int, CmdExec*)'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:25: undefined reference to `CmdParser::regCmd(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int, CmdExec*)'
+../../lib/libmem.a(memCmd.o): In function `MTResetCmd::exec(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:41: undefined reference to `CmdExec::lexSingleOption(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, bool) const'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:47: undefined reference to `CmdExec::errorOption(CmdOptionError, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const'
+../../lib/libmem.a(memCmd.o): In function `MTNewCmd::exec(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:79: undefined reference to `CmdExec::lexOptions(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long) const'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:83: undefined reference to `CmdExec::errorOption(CmdOptionError, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:89: undefined reference to `CmdExec::errorOption(CmdOptionError, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:91: undefined reference to `CmdExec::errorOption(CmdOptionError, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:93: undefined reference to `CmdExec::errorOption(CmdOptionError, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:94: undefined reference to `CmdExec::errorOption(CmdOptionError, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const'
+../../lib/libmem.a(memCmd.o):/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:98: more undefined references to `CmdExec::errorOption(CmdOptionError, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const' follow
+../../lib/libmem.a(memCmd.o): In function `MTDeleteCmd::exec(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:130: undefined reference to `CmdExec::lexOptions(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long) const'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:134: undefined reference to `CmdExec::errorOption(CmdOptionError, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:142: undefined reference to `CmdExec::errorOption(CmdOptionError, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:145: undefined reference to `CmdExec::errorOption(CmdOptionError, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:148: undefined reference to `CmdExec::errorOption(CmdOptionError, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const'
+/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:150: undefined reference to `CmdExec::errorOption(CmdOptionError, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const'
+../../lib/libmem.a(memCmd.o):/home/harvey/Desktop/DSnP/hw4/src/mem/memCmd.cpp:151: more undefined references to `CmdExec::errorOption(CmdOptionError, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const' follow
+collect2: error: ld returned 1 exit status
+Makefile:12: recipe for target '../../bin/memTest' failed
+make[1]: *** [../../bin/memTest] Error 1
+Makefile:31: recipe for target 'main' failed
+make: *** [main] Error 2
