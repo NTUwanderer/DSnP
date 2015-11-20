@@ -1,0 +1,40 @@
+adt> adta -r 20
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = ithomq   [  1] = jnyxqs   [  2] = dpagdu   [  3] = ekdczf   
+[  4] = nvphqn   [  5] = mzhunu   [  6] = kxhjvx   [  7] = byncer   
+[  8] = xjbalb   [  9] = gzxwgo   [ 10] = jtnrnb   [ 11] = lyysht   
+[ 12] = qjrelw   [ 13] = vifxjr   [ 14] = yprwly   [ 15] = kvrxmf   
+[ 16] = yxdwql   [ 17] = qhuhlf   [ 18] = ehokex   [ 19] = cdmtzy   
+
+
+adt> adtd -front 3
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = ekdczf   [  1] = nvphqn   [  2] = mzhunu   [  3] = kxhjvx   
+[  4] = byncer   [  5] = xjbalb   [  6] = gzxwgo   [  7] = jtnrnb   
+[  8] = lyysht   [  9] = qjrelw   [ 10] = vifxjr   [ 11] = yprwly   
+[ 12] = kvrxmf   [ 13] = yxdwql   [ 14] = qhuhlf   [ 15] = ehokex   
+[ 16] = cdmtzy   
+
+adt> adtd -back 5
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = ekdczf   [  1] = nvphqn   [  2] = mzhunu   [  3] = kxhjvx   
+[  4] = byncer   [  5] = xjbalb   [  6] = gzxwgo   [  7] = jtnrnb   
+[  8] = lyysht   [  9] = qjrelw   [ 10] = vifxjr   [ 11] = yprwly   
+
+
+adt> adtd -rand 4
+
+adt> adtp
+=== ADT (dlist) ===
+[  0] = ekdczf   [  1] = nvphqn   [  2] = mzhunu   [  3] = xjbalb   
+[  4] = gzxwgo   [  5] = jtnrnb   [  6] = vifxjr   [  7] = yprwly   
+
+
+adt> q -f
+
