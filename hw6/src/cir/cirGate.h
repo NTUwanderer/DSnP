@@ -27,7 +27,7 @@ class CirGate;
 class CirGate {
 public:
    CirGate(GateType type, unsigned no = 0, unsigned id = 0):
-		flag(false), gateType(type), lineNo(no), gateId(id) {}
+		flag(false), gateType(type), lineNo(no), gateId(id), symbol("") {}
    virtual ~CirGate() { inputs.clear(); outputs.clear(); }
 
    // Basic access methods
@@ -38,6 +38,8 @@ public:
    unsigned getLineNo() const { return lineNo; }
 	void setGateId(unsigned id) { gateId = id; }
 	unsigned getGateId() const { return gateId; }
+	void setSymbol(string s) { symbol = s; }
+	string getSymbol() const { return symbol; }
 
    // Printing functions
    void printGate() const;
@@ -67,6 +69,7 @@ protected:
 	GateType gateType;
 	unsigned lineNo;
 	unsigned gateId;
+	string symbol;
 
 	GateList inputs;
 	GateList outputs;

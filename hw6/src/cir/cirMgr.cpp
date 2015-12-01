@@ -239,6 +239,23 @@ bool CirMgr::readCircuit(const string& fileName)
 		gi->addOutput(g);
 		gateList.push_back(g);
 	}
+	unsigned symbol = ins + outs + ands, listSize = circuit.size();
+	while (symbol < listSize) {
+		string s = circuit[symbol];
+		if (s == "c")	break;
+		bool input;
+		if (s[0] == 'i')	input = true;
+		else if (s[0] == 'o')	input = false;
+		else {
+			cout << "error: " << s << endl;
+			break;
+		}
+		tokens.clear();
+		getTokens(s, tokens);
+		if (tokens.size() != 2)	cout << "error: " << s << endl;
+		unsigned id = str2Unsigned(tokens[0].substr(1));
+		getGate(id).setSymbol(tokens[1]);
+	}
 
    return true;
 }

@@ -55,7 +55,7 @@ void CirGate::printGate() const {
 		for (size_t i = 0; i < inputs.size(); ++i) {
 			info += ' ';
 			if (getInput(i)->getType() == UNDEF_GATE)	info += '*';
-			else if (isInv(i))	info += '!';
+			if (isInv(i))	info += '!';
 			info += unsToStr(getInput(i)->getGateId());
 		}
 	}
