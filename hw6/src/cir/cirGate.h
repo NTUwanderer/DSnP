@@ -1,0 +1,75 @@
+/****************************************************************************
+  FileName     [ cirGate.h ]
+  PackageName  [ cir ]
+  Synopsis     [ Define basic gate data structures ]
+  Author       [ Chung-Yang (Ric) Huang ]
+  Copyright    [ Copyleft(c) 2008-present LaDs(III), GIEE, NTU, Taiwan ]
+****************************************************************************/
+
+#ifndef CIR_GATE_H
+#define CIR_GATE_H
+
+#include <string>
+#include <vector>
+#include <iostream>
+#include "cirDef.h"
+
+#define NEG 0x1
+
+using namespace std;
+
+class CirGate;
+
+//------------------------------------------------------------------------
+//   Define classes
+//------------------------------------------------------------------------
+// TODO: Define your own data members and member functions, or classes
+class CirGate {
+public:
+   CirGate(GateType type, unsigned no = 0, unsigned id = 0):
+		flag(false), gateType(type), lineNo(no), gateId(id) {}
+   virtual ~CirGate() { inputs.clear(); outputs.clear(); }
+
+   // Basic access methods
+	void setGateType(GateType g) { gateType = g; }
+	GateType getType() const { return gateType; }
+   string getTypeStr() const; 
+	void setLineNo(unsigned no) { lineNo = no; }
+   unsigned getLineNo() const { return lineNo; }
+	void setGateId(unsigned id) { gateId = id; }
+	unsigned getGateId() const { return gateId; }
+
+   // Printing functions
+   void printGate() const;
+   void reportGate() const;
+   void reportFanin(int level) const;
+   void reportFanout(int level) const;
+	
+	void addInput(CirGate* g, bool inv = false) {
+		if (inv)	g = (CirGate*)((size_t)g + 1);
+		inputs.push_back(g);
+	}
+	CirGate* getInput(int i) const { return (CirGate*)(((size_t)inputs[i]) & ~size_t(NEG)); }
+	bool isInv(size_t i) const { return ((size_t)inputs[i] & NEG); }
+
+	void addOutput(CirGate* g) { outputs.push_back(g); }
+	GateList getOutputs() const { return outputs; }
+	CirGate* getOutput(size_t i) {
+		if (i >= outputs.size()) return 0;
+		return outputs[i];
+	}
+	void clearOutput() { outputs.clear(); }
+
+	static unsigned index;
+
+	mutable bool flag;
+protected:
+	GateType gateType;
+	unsigned lineNo;
+	unsigned gateId;
+
+	GateList inputs;
+	GateList outputs;
+
+};
+#endif // CIR_GATE_H

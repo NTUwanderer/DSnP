@@ -27,13 +27,14 @@ class BSTreeNode
 	friend class BSTree<T>;
 	friend class BSTree<T>::iterator;
 
-	BSTreeNode(const T& d, BSTreeNode<T>* p = 0, BSTreeNode<T>* l = 0, BSTreeNode<T>* r = 0):
-		_data(d), _parent(p), _left(l), _right(r) {}
+	BSTreeNode(const T& d, BSTreeNode<T>* p = 0, BSTreeNode<T>* l = 0, BSTreeNode<T>* r = 0, size_t s = 1):
+		_data(d), _parent(p), _left(l), _right(r), _nodes(s) {}
 
 	T 					_data;
 	BSTreeNode<T>*	_parent;
 	BSTreeNode<T>*	_left;
 	BSTreeNode<T>*	_right;
+	size_t			_nodes;
 };
 
 
@@ -108,6 +109,9 @@ public:
 			--(*this);
 			return temp;
 		}
+		
+		iterator& operator + (int i) const {}
+		iterator& operator += (int i) {}
 
       iterator& operator = (const iterator& i) { _node = i._node; return *this; }
 

@@ -1,0 +1,4 @@
+bundle.py bxxxxxxxx hwx
+cp SelfCheck hwx
+cd hwx
+SelfCheck bxxxxxxxx_hwx.tgz
