@@ -239,9 +239,9 @@ bool CirMgr::readCircuit(const string& fileName)
 		gi->addOutput(g);
 		gateList.push_back(g);
 	}
-	unsigned symbol = ins + outs + ands, listSize = circuit.size();
+	unsigned symbol = ins + outs + ands + 1, listSize = circuit.size();
 	while (symbol < listSize) {
-		string s = circuit[symbol];
+		string s = circuit[symbol++];
 		if (s == "c")	break;
 		bool input;
 		if (s[0] == 'i')	input = true;
@@ -253,8 +253,9 @@ bool CirMgr::readCircuit(const string& fileName)
 		tokens.clear();
 		getTokens(s, tokens);
 		if (tokens.size() != 2)	cout << "error: " << s << endl;
-		unsigned id = str2Unsigned(tokens[0].substr(1));
-		getGate(id).setSymbol(tokens[1]);
+		unsigned ith = str2Unsigned(tokens[0].substr(1));
+		if (input)	gateList[ith + 1]->setSymbol(tokens[1]);
+		else			gateList[ith + 1 + ins + ands]->setSymbol(tokens[1]);
 	}
 
    return true;
@@ -343,6 +344,36 @@ void CirMgr::printFloatGates() const {
 }
 
 void CirMgr::writeAag(ostream& outfile) const {
+	for (unsigned i = 0, size = gateList.size(); i < size; ++i) {
+		cout << i << ": " << gateList[i]->getGateId() << endl;
+	}
+	string s_aig = "";
+	unsigned aig = 0;
+	for (unsigned i = ins + ands + 1; i <= ins + ands + outs; ++i)
+		gateList[i]->printAig(s_aig, aig);
+	for (unsigned i = 0, size = gateList.size(); i < size; ++i)
+		gateList[i]->flag = false;
+
+	outfile	<< "aag " << vars << ' ' << ins << " 0 " << outs
+				<< ' ' << aig << '\n';
+	for (unsigned i = 1; i <= ins; ++i) {
+		outfile << gateList[i]->getGateId() * 2 << '\n';
+	}
+	for (unsigned i = ins + ands + 1; i <= ins + ands + outs; ++i) {
+		unsigned id = gateList[i]->getInput(0)->getGateId() * 2;
+		if (gateList[i]->isInv(0))	++id;
+		outfile << id << '\n';
+	}
+	outfile << s_aig;
+	for (unsigned i = 1; i <= ins; ++i) {
+		if (gateList[i]->getSymbol() == "")	continue;
+		outfile << 'i' << i - 1 << ' ' << gateList[i]->getSymbol() << '\n';
+	}
+	for (unsigned i = ins + ands + 1; i <= ins + ands + outs; ++i) {
+		if (gateList[i]->getSymbol() == "") continue;
+		outfile << 'o' << i - ins - ands - 1<< ' ' << gateList[i]->getSymbol() << '\n';
+	}
+	outfile << "c\n" << "AAG output by Harvey Yang";
 }
 
 CirGate* CirMgr::createUndef(unsigned gid) {

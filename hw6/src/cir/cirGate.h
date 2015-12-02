@@ -45,18 +45,24 @@ public:
    void printGate() const;
    void reportGate() const;
    void reportFanin(int level) const;
+	void myFanin(int level, bool inv) const;
    void reportFanout(int level) const;
+	void myFanout(int level, bool inv) const;
+	void printAig(string& s, unsigned& cnt) const;
 	
 	void addInput(CirGate* g, bool inv = false) {
 		if (inv)	g = (CirGate*)((size_t)g + 1);
 		inputs.push_back(g);
 	}
-	CirGate* getInput(int i) const { return (CirGate*)(((size_t)inputs[i]) & ~size_t(NEG)); }
+	CirGate* getInput(size_t i) const {
+		if (i >= inputs.size())	return 0;
+		return (CirGate*)(((size_t)inputs[i]) & ~size_t(NEG));
+	}
 	bool isInv(size_t i) const { return ((size_t)inputs[i] & NEG); }
 
 	void addOutput(CirGate* g) { outputs.push_back(g); }
 	GateList getOutputs() const { return outputs; }
-	CirGate* getOutput(size_t i) {
+	CirGate* getOutput(size_t i) const {
 		if (i >= outputs.size()) return 0;
 		return outputs[i];
 	}
