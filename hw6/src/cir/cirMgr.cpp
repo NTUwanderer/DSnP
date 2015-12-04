@@ -289,8 +289,7 @@ void CirMgr::printNetlist() const {
 		if (gateList[i]->getType() == PO_GATE)
 			gateList[i]->printGate();
 	CirGate::index = 0;
-	for (size_t i = 0; i < gateList.size(); ++i)
-		gateList[i]->flag = false;
+	resetFlag();
 }
 
 void CirMgr::printPIs() const {
@@ -351,8 +350,7 @@ void CirMgr::writeAag(ostream& outfile) const {
 	unsigned aig = 0;
 	for (unsigned i = ins + ands + 1; i <= ins + ands + outs; ++i)
 		gateList[i]->printAig(s_aig, aig);
-	for (unsigned i = 0, size = gateList.size(); i < size; ++i)
-		gateList[i]->flag = false;
+	resetFlag();
 
 	outfile	<< "aag " << vars << ' ' << ins << " 0 " << outs
 				<< ' ' << aig << '\n';
@@ -380,4 +378,9 @@ CirGate* CirMgr::createUndef(unsigned gid) {
 	CirGate* g = new CirGate(UNDEF_GATE, 0, gid);
 	gateList.push_back(g);
 	return g;
+}
+
+void CirMgr::resetFlag() const {
+	for (unsigned i = 0, size = gateList.size(); i < size; ++i)
+		gateList[i]->flag = false;
 }

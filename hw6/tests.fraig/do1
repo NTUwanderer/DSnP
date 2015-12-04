@@ -1,0 +1,9 @@
+cirr sim10.aag
+cirp
+cirp -n
+cirp -pi
+cirp -po
+cirp -fl
+cirg 345
+cirg 753 -fanin 100
+cirg 3 -fanout 100

@@ -43,6 +43,7 @@ public:
    void writeAag(ostream&) const;
 
 	CirGate* createUndef(unsigned gid);
+	void resetFlag() const;
 private:
 	GateList gateList;
 	vector<string> circuit;

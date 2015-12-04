@@ -1,0 +1,11 @@
+cirr opt06.aag
+cirp
+cirp -n
+cirp -pi
+cirp -po
+cirp -fl
+cirg 9
+cirg 16 -fanin 100
+cirg 3 -fanout 100
+cirg 1 -fanout 100
+q -f

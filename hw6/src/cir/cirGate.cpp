@@ -78,13 +78,7 @@ void CirGate::reportGate() const {
 void CirGate::reportFanin(int level) const {
 	assert (level >= 0);
 	myFanin(level, false);
-	unsigned i = 0;
-	while (true) {
-		CirGate *g = cirMgr->getGate(i);
-		if (g == 0)	break;
-		g->flag = false;
-		++i;
-	}
+	cirMgr->resetFlag();
 }
 
 void CirGate::myFanin(int level, bool inv) const {
@@ -107,13 +101,7 @@ void CirGate::myFanin(int level, bool inv) const {
 void CirGate::reportFanout(int level) const {
 	assert (level >= 0);
 	myFanout(level, false);
-	unsigned i = 0;
-	while (true) {
-		CirGate *g = cirMgr->getGate(i);
-		if (g == 0)	break;
-		g->flag = false;
-		++i;
-	}
+	cirMgr->resetFlag();
 }
 
 void CirGate::myFanout(int level, bool inv) const {
