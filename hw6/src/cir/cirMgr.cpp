@@ -168,17 +168,24 @@ parseError(CirParseError err)
 /**************************************************************/
 /*   class CirMgr member functions for circuit construction   */
 /**************************************************************/
+
+CirMgr::~CirMgr() {
+	for (GateList::iterator it = gateList.begin(); it != gateList.end(); ++it)
+		if((*it) != 0)	delete (*it);
+	gateList.clear();
+}
+
 CirGate* CirMgr::getGate(unsigned gid) const {
-	if (gid >= gateList.size())	return 0;
+	if (gid >= vars + outs + 1)	return 0;
 	return gateList[gid];
 }
 bool CirMgr::readCircuit(const string& fileName)
 {
 	ifstream ifs(fileName.c_str(), ifstream::in);
 	if (! ifs.is_open())	return false;
-	if (!circuit.empty())	circuit.clear();
 	string line;
 	char c;
+	vector<string> circuit;
 	if (!ifs.is_open())	return false;
 	while (ifs.get(c)) {
 		if (c == '\n')	{
@@ -292,34 +299,42 @@ void CirMgr::printSummary() const {
 
 void CirMgr::printNetlist() const {
 	cout << endl;
-	for (size_t i = vars, size = gateList.size(); i < size; ++i)
-		if (gateList[i]->getType() == PO_GATE)
-			gateList[i]->printGate();
+	for (unsigned i = 0, size = vars + outs + 1; i < size; ++i) {
+		CirGate *g = getGate(i);
+		if (g == 0)	continue;
+		if (g->getType() == PO_GATE)
+			g->printGate();
+	}
 	CirGate::index = 0;
 	resetFlag();
 }
 
 void CirMgr::printPIs() const {
    cout << "PIs of the circuit:";
-	for (size_t i = 0; i < gateList.size(); ++i)
-		if (gateList[i]->getType() == PI_GATE)
-			cout << " " << gateList[i]->getGateId();
+	for (size_t i = 0, size = vars + outs + 1, count = 0; i < size && count < ins; ++i) {
+		CirGate *g = getGate(i);
+		if (g != 0 && g->getType() == PI_GATE)
+			cout << " " << g->getGateId();
+	}
    cout << endl;
 }
 
 void CirMgr::printPOs() const {
    cout << "POs of the circuit:";
-	for (size_t i = 0; i < gateList.size(); ++i)
-		if (gateList[i]->getType() == PO_GATE)
-			cout << " " << gateList[i]->getGateId();
+	for (size_t i = vars + 1, size = vars + outs + 1; i < size; ++i) {
+		CirGate *g = getGate(i);
+		if (g != 0 && g->getType() == PO_GATE)
+			cout << " " << g->getGateId();
+	}
 
    cout << endl;
 }
 
 void CirMgr::printFloatGates() const {
 	vector<unsigned> temp;
-	for (size_t i = 0, size = gateList.size(); i < size; ++i) {
-		CirGate* g = gateList[i];
+	for (size_t i = 0, size = vars + outs + 1; i < size; ++i) {
+		CirGate* g = getGate(i);
+		if (g == 0)	continue;
 		if (g->getType() == PO_GATE && g->getInput(0)->getType() == UNDEF_GATE)
 			temp.push_back(g->getGateId());
 		else if (g->getType() == AIG_GATE &&
@@ -335,8 +350,9 @@ void CirMgr::printFloatGates() const {
 	}
 	temp.clear();
 
-	for (size_t i = 0, size = gateList.size(); i < size; ++i) {
-		CirGate* g = gateList[i];
+	for (size_t i = 0, size = vars + outs + 1; i < size; ++i) {
+		CirGate* g = getGate(i);
+		if (g == 0)	continue;
 		if ((g->getType() == PI_GATE || g->getType() == AIG_GATE)
 				&& g->getOutput(0) == 0)
 			temp.push_back(g->getGateId());
@@ -350,44 +366,56 @@ void CirMgr::printFloatGates() const {
 }
 
 void CirMgr::writeAag(ostream& outfile) const {
-	for (unsigned i = 0, size = gateList.size(); i < size; ++i) {
-		cout << i << ": " << gateList[i]->getGateId() << endl;
-	}
 	string s_aig = "";
-	unsigned aig = 0;
-	for (unsigned i = ins + ands + 1; i <= ins + ands + outs; ++i)
-		gateList[i]->printAig(s_aig, aig);
+	unsigned aig = 0, count = 0;
+	for (unsigned i = vars + 1; i <= vars + outs + 1; ++i) {
+		CirGate *g = getGate(i);
+		if (g != 0 && g->getType() == PO_GATE)
+			g->printAig(s_aig, aig);
+	}
 	resetFlag();
 
 	outfile	<< "aag " << vars << ' ' << ins << " 0 " << outs
 				<< ' ' << aig << '\n';
-	for (unsigned i = 1; i <= ins; ++i) {
-		outfile << gateList[i]->getGateId() * 2 << '\n';
+	vector<unsigned> ios;
+	ios.resize(ins);
+	for (unsigned i = 1; i <= ins && count < ins; ++i) {
+		CirGate *g = getGate(i);
+		if (g != 0 && g->getType() == PI_GATE) {
+			ios[g->getLineNo() - 2] = g->getGateId();
+			++count;
+		}
 	}
-	for (unsigned i = ins + ands + 1; i <= ins + ands + outs; ++i) {
-		unsigned id = gateList[i]->getInput(0)->getGateId() * 2;
-		if (gateList[i]->isInv(0))	++id;
+	if (count != ins)	outfile << "count: " << count << ", ins: " << ins << endl;
+	for (unsigned i = 0; i < ins; ++i)	outfile << ios[i] * 2 << '\n';
+
+	for (unsigned i = vars + 1; i < vars + outs + 1; ++i) {
+		CirGate *g = getGate(i);
+		if (g == 0)	continue;
+		unsigned id = g->getInput(0)->getGateId() * 2;
+		if (g->isInv(0))	++id;
 		outfile << id << '\n';
 	}
 	outfile << s_aig;
-	for (unsigned i = 1; i <= ins; ++i) {
-		if (gateList[i]->getSymbol() == "")	continue;
-		outfile << 'i' << i - 1 << ' ' << gateList[i]->getSymbol() << '\n';
+	for (unsigned i = 0; i < ins; ++i) {
+		string s = getGate(ios[i])->getSymbol();
+		if (s != "")	outfile << 'i' << i << ' ' << getGate(ios[i])->getSymbol() << '\n';
 	}
-	for (unsigned i = ins + ands + 1; i <= ins + ands + outs; ++i) {
-		if (gateList[i]->getSymbol() == "") continue;
-		outfile << 'o' << i - ins - ands - 1<< ' ' << gateList[i]->getSymbol() << '\n';
+	for (unsigned i = vars + 1; i < vars + outs + 1; ++i) {
+		if (getGate(i) == 0 || getGate(i)->getSymbol() == "") continue;
+		outfile << 'o' << i - vars - 1<< ' ' << getGate(i)->getSymbol() << '\n';
 	}
-	outfile << "c\n" << "AAG output by Harvey Yang";
+	outfile << "c\n" << "AAG output by Harvey Yang\n";
 }
 
 CirGate* CirMgr::createUndef(unsigned gid) {
-	CirGate* g = new CirGate(UNDEF_GATE, 0, gid);
-	gateList.push_back(g);
-	return g;
+	gateList[gid] = new CirGate(UNDEF_GATE, 0, gid);
+	return gateList[gid];
 }
 
 void CirMgr::resetFlag() const {
-	for (unsigned i = 0, size = gateList.size(); i < size; ++i)
-		gateList[i]->flag = false;
+	for (unsigned i = 0, size = vars + outs + 1; i < size; ++i) {
+		CirGate *g = getGate(i);
+		if (g != 0)	g->flag = false;
+	}
 }

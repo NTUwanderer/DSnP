@@ -131,13 +131,13 @@ void CirGate::myFanout(int level, bool inv) const {
 		}
 	}
 	if (index != 0)	--index;
- 
 }
 
 void CirGate::printAig(string& s, unsigned& cnt) const {
+	if (flag) return;
 	for (unsigned i = 0; i < inputs.size(); ++i)
 		getInput(i)->printAig(s, cnt);
-	if (gateType == AIG_GATE && flag == false) {
+	if (gateType == AIG_GATE) {
 		flag = true;
 		stringstream ss;
 		ss << gateId * 2
