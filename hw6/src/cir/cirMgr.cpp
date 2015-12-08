@@ -169,9 +169,8 @@ parseError(CirParseError err)
 /*   class CirMgr member functions for circuit construction   */
 /**************************************************************/
 CirGate* CirMgr::getGate(unsigned gid) const {
-	for (size_t i = 0; i < gateList.size(); ++i)
-		if (gateList[i]->getGateId() == gid)	return gateList[i];
-	return 0;
+	if (gid >= gateList.size())	return 0;
+	return gateList[gid];
 }
 bool CirMgr::readCircuit(const string& fileName)
 {
@@ -206,15 +205,19 @@ bool CirMgr::readCircuit(const string& fileName)
 		cout << fileName << " error format, circuit size: " << circuit.size() << endl;
 		return false;
 	}
+	gateList.resize(vars + outs + 1, 0);
+	gateList[0] = new CirGate(CONST_GATE, 0, 0);
+	// gateList.push_back(new CirGate(CONST_GATE, 0, 0));
 
-	gateList.push_back(new CirGate(CONST_GATE, 0, 0));
 	for (unsigned i = 0; i < ins; ++i) {
 		unsigned id = str2Unsigned(circuit[i + 1]);
-		gateList.push_back(new CirGate(PI_GATE, i + 2, id / 2));
+		gateList[id / 2] = new CirGate(PI_GATE, i + 2, id / 2);
+		// gateList.push_back(new CirGate(PI_GATE, i + 2, id / 2));
 	}
 	for (unsigned i = ins + outs; i < ins + outs + ands; ++i) {
 		unsigned id = str2Unsigned(circuit[i + 1]);
-		gateList.push_back(new CirGate(AIG_GATE, i + 2, id / 2));
+		gateList[id / 2] = new CirGate(AIG_GATE, i + 2, id / 2);
+		// gateList.push_back(new CirGate(AIG_GATE, i + 2, id / 2));
 	}
 	for (unsigned i = ins + outs; i < ins + outs + ands; ++i) {
 		vector<string> temps;
@@ -237,7 +240,9 @@ bool CirMgr::readCircuit(const string& fileName)
 		if (gi == 0)	createUndef(n / 2);
 		g->addInput(gi, n % 2);
 		gi->addOutput(g);
-		gateList.push_back(g);
+
+		gateList[vars + i + 1 - ins] = g;
+		// gateList.push_back(g);
 	}
 	unsigned symbol = ins + outs + ands + 1, listSize = circuit.size();
 	while (symbol < listSize) {
@@ -254,8 +259,10 @@ bool CirMgr::readCircuit(const string& fileName)
 		getTokens(s, tokens);
 		if (tokens.size() != 2)	cout << "error: " << s << endl;
 		unsigned ith = str2Unsigned(tokens[0].substr(1));
-		if (input)	gateList[ith + 1]->setSymbol(tokens[1]);
-		else			gateList[ith + 1 + ins + ands]->setSymbol(tokens[1]);
+		if (input)	getGate(str2Unsigned(circuit[ith + 1]) / 2)->setSymbol(tokens[1]);
+		else			getGate(vars + ith + 1)->setSymbol(tokens[1]);
+		// if (input)	gateList[ith + 1]->setSymbol(tokens[1]);
+		// else			gateList[ith + 1 + ins + ands]->setSymbol(tokens[1]);
 	}
 
    return true;
@@ -285,7 +292,7 @@ void CirMgr::printSummary() const {
 
 void CirMgr::printNetlist() const {
 	cout << endl;
-	for (size_t i = 0; i < gateList.size(); ++i)
+	for (size_t i = vars, size = gateList.size(); i < size; ++i)
 		if (gateList[i]->getType() == PO_GATE)
 			gateList[i]->printGate();
 	CirGate::index = 0;

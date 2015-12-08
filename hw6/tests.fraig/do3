@@ -1,0 +1,13 @@
+cirr sim12.aag
+cirp
+cirp -n
+cirp -pi
+cirp -po
+cirp -fl
+cirg 2
+cirg 3567
+cirg 9642 -fanin 1000
+cirg 2 -fanout 1000
+cirg 3 -fanout 1000
+cirg 9642 -fanin 1000
+q -f

@@ -25,7 +25,13 @@ class CirMgr
 {
 public:
    CirMgr() {}
-   ~CirMgr() {}
+   ~CirMgr() {
+		for (GateList::iterator it = gateList.begin(); it != gateList.end(); ++it)
+			if ((*it) != 0)	delete (*it);
+		
+		gateList.clear();
+		circuit.clear();
+	}
 
    // Access functions
    // return '0' if "gid" corresponds to an undefined gate.
@@ -47,7 +53,6 @@ public:
 private:
 	GateList gateList;
 	vector<string> circuit;
-	CirGate* const0;
 	unsigned vars;
 	unsigned ins;
 	unsigned outs;
