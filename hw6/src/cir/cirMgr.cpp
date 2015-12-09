@@ -410,7 +410,7 @@ void CirMgr::writeAag(ostream& outfile) const {
 
 CirGate* CirMgr::createUndef(unsigned gid) {
 	gateList[gid] = new CirGate(UNDEF_GATE, 0, gid);
-	return gateList[gid];
+	return getGate(gid);
 }
 
 void CirMgr::resetFlag() const {
