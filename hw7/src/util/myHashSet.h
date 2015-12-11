@@ -48,7 +48,7 @@ public:
       friend class HashSet<Data>;
 
    public:
-		iterator (typename std::vector<Data>::iterator i,
+		iterator (typename std::vector<Data>::iterator const& i,
 					 vector<Data>* const& b, const size_t& s)
 			: _i(i), _b(b), _s(s) {}
 		iterator (const iterator& i) : _i(i._i), _b(i._b), _s(i._s) {}
@@ -57,7 +57,7 @@ public:
 		iterator& operator ++ () {
 			if (_i == _b[_s - 1].end())	return *this;
 			size_t n = bucketNum(*_i);
-			if (_i == --_b[n].end()) {
+			if (_i != --_b[n].end()) {
 				++_i;
 				return *this;
 			}
@@ -149,7 +149,7 @@ public:
 	}
    // Pass the end
    iterator end() const {
-		return iterator(_buckets[_numBuckets - 1], _buckets, _numBuckets);
+		return iterator(_buckets[_numBuckets - 1].end(), _buckets, _numBuckets);
 		/*
 		size_t i = _numBuckets - 1;
 		while (true) {
@@ -215,6 +215,7 @@ public:
    bool insert(const Data& d) {
 		if (check(d))	return false;
 		_buckets[bucketNum(d)].push_back(d);
+		cout << "Task node inserted: " << d << endl;
 		return true;
 	}
 

@@ -37,7 +37,7 @@ TaskNode::operator () () const
 
 ostream& operator << (ostream& os, const TaskNode& n)
 {
-   return os << "(" << n._name << ", " << n._load << ")";
+   return os << "(" << n._name << ", " << n._load << ")"; // comment
 }
 
 TaskMgr::TaskMgr(size_t nMachines)
@@ -72,6 +72,13 @@ void
 TaskMgr::add(size_t nMachines)
 {
    // TODO...
+	for (;nMachines != 0; --nMachines) {
+		TaskNode temp = TaskNode();
+		if (_taskHash.insert(temp))
+			 _taskHeap.insert(temp);
+		else
+			++nMachines;
+	}
 }
 
 // return true if TaskNode is successfully inserted
@@ -79,7 +86,11 @@ TaskMgr::add(size_t nMachines)
 bool
 TaskMgr::add(const string& s, size_t l)
 {
-   // TODO...
+	TaskNode temp = TaskNode(s, l);
+   if (_taskHash.insert(temp)) {
+		 _taskHeap.insert(temp);
+		 return true;
+	}
    return false;
 }
 
@@ -93,6 +104,13 @@ bool
 TaskMgr::assign(size_t l)
 {
    // TODO...
+	if (_taskHeap.empty())	return false;
+	TaskNode temp = TaskNode( _taskHeap.min().getName(),
+									  _taskHeap.min().getLoad() + l);
+	_taskHeap.delMin();
+	_taskHeap.insert(temp);
+	_taskHash.update(temp);
+
    return true;
 }
 

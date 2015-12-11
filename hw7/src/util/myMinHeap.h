@@ -29,24 +29,23 @@ public:
    size_t size() const { return _data.size(); }
 
    // TODO
+	bool empty() const { return _data.empty(); }
    const Data& min() const {
 		if (! _data.empty())	return _data[0];
 		return Data();
 	}
    void insert(const Data& d) {
 		_data.push_back(d);
-		size_t i = size();
+		size_t i = size() - 1;
 		while (i != 0) {
 			size_t up = (i + 1) / 2 - 1;
 			if (d < _data[up]) {
 				_data[i] = _data[up];
 				i = up;
 			}
-			else {
-				_data[i] = d;
-				break;
-			}
+			else	break;
 		}
+		_data[i] = d;
 	}
    void delMin() { delData(0); }
    void delData(size_t i) {
