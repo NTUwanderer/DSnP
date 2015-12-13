@@ -53,13 +53,27 @@ public:
 		if (i >= size)	return;
 		Data temp = _data.back();
 		_data.pop_back();
+		bool goUp = false;
+		while (i != 0) {
+			size_t up = (i + 1) / 2 - 1;
+			if (temp < _data[up]) {
+				_data[i] = _data[up];
+				i = up;
+				goUp = true;
+			}
+		}
+		_data[i] = temp;
+		if (goUp)	return;
 
 		while (true) {
 			size_t n = 2 * i + 1;
 			if (n >= size)	break;
 			if (n + 1 < size && _data[n + 1] < _data[n])	n += 1;
-			_data[i] = _data[n];
-			i = n;
+			if (_data[n] < temp) {
+				_data[i] = _data[n];
+				i = n;
+			}
+			else	break;
 		}
 		_data[i] = temp;
 	}
