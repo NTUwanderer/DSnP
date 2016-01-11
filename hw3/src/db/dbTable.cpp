@@ -47,6 +47,7 @@ ostream& operator << (ostream& os, const DBTable& t)
 		}
 		os << endl;
 	}
+	os << endl;
 	return os;
 }
 
@@ -194,11 +195,16 @@ DBTable::getSum(size_t c) const
 {
 	// TODO: compute the sum of data in column #c
 	int sum = 0;
+	bool flag = false;
 	for(int i = 0, n = nRows(); i < n; i++){
 		int number = _table[i][c];
-		if(number != INT_MAX)	sum += number;
+		if(number != INT_MAX) {
+			sum += number;
+			flag = true;
+		}
 	}
-	return sum;
+	if (flag)	return sum;
+	return NAN;
 }
 
 int
