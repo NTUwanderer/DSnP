@@ -273,7 +273,8 @@ void CmdParser::listCmd(const string& str)
 		}
 		else {
 			for (CmdMap::const_iterator it = _cmdMap.begin(); it != _cmdMap.end(); ++it) {
-				if (myStrNCmp(it->first + it->second->getOptCmd(), toks[0], toks[0].size()) == 0)
+				string s1 = it->first + it->second->getOptCmd();
+				if (s1.size() >= toks[0].size() && myStrNCmp(s1, toks[0], toks[0].size()) == 0)
 					cmds.push_back(it->first + it->second->getOptCmd());
 			}
 			size_t cmdsSize = cmds.size();
