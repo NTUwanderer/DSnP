@@ -58,7 +58,7 @@ bool initDbCmd()
 	if ( !( cmdMgr->regCmd("DBAPpend", 4, new DBAppendCmd) && 
 			cmdMgr->regCmd("DBAVerage", 4, new DBAveCmd) &&
 			cmdMgr->regCmd("DBCount", 3, new DBCountCmd) &&
-			cmdMgr->regCmd("DBDel", 3, new DBDelCmd) &&
+			cmdMgr->regCmd("DBDelete", 3, new DBDelCmd) &&
 			cmdMgr->regCmd("DBMAx", 4, new DBMaxCmd) &&
 			cmdMgr->regCmd("DBMIn", 4, new DBMinCmd) &&
 			cmdMgr->regCmd("DBPrint", 3, new DBPrintCmd) &&

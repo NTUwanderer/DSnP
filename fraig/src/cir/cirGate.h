@@ -25,6 +25,36 @@ class CirGate;
 //------------------------------------------------------------------------
 //   Define classes
 //------------------------------------------------------------------------
+
+class KeyNode {
+public:
+	KeyNode(): num(0) {}
+	KeyNode(const size_t& id1, const size_t& id2): num(getKeyValue(id1, id2)) {};
+	~KeyNode() {}
+
+	bool operator == (const KeyNode& node) const { return (num == node.num); }
+	bool operator != (const KeyNode& node) const { return (num != node.num); }
+	bool operator <  (const KeyNode& node) const { return (num <  node.num); }
+	bool operator >  (const KeyNode& node) const { return (num >  node.num); }
+	bool operator <= (const KeyNode& node) const { return (num <= node.num); }
+	bool operator >= (const KeyNode& node) const { return (num >= node.num); }
+	KeyNode operator = (const KeyNode& node) { num = node.num; return *this; }
+	KeyNode operator = (const size_t& size) { num = size; return *this; }
+	size_t operator () () const { return num; }
+
+	void setKeyValue(const size_t& id1, const size_t& id2) {
+		num = getKeyValue(id1, id2);
+	} 
+
+private:
+	size_t num;
+
+	static size_t getKeyValue(const size_t& id1, const size_t& id2) {
+		if (id1 < id2)	return (id1 << (sizeof(size_t) / 2)) + id2;
+		else				return (id2 << (sizeof(size_t) / 2)) + id1;
+	}
+};
+
 class CirGate
 {
 public:

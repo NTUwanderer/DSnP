@@ -207,7 +207,7 @@ private:
    vector<HashNode>*        _buckets;
 
    size_t bucketNum(const HashKey& k) const {
-      return (k % _numBuckets); }
+      return (k() % _numBuckets); }
 
 };
 
