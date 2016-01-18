@@ -81,6 +81,7 @@ public:
    void reportFanout(int level) const;
   	void myFanout(int level, bool inv) const;
   	void printAig(string& s, unsigned& cnt) const;
+	unsigned printAig(vector<string>*, vector<string>*, vector<string>*) const;
   
   	void addInput(CirGate* g, bool inv = false) {
     	if (inv)  g = (CirGate*)((size_t)g + 1);

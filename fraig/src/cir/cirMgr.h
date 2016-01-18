@@ -72,6 +72,12 @@ private:
    unsigned ins;
    unsigned outs;
    unsigned ands;
+
+	vector<unsigned> FEC;
+	vector<unsigned> IFEC;
+
+	void resetFEC(IdList&);
+	void simOneTime(const IdList, const size_t*, const unsigned&);
 };
 
 #endif // CIR_MGR_H

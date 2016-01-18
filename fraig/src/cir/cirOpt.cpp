@@ -43,6 +43,11 @@ void CirMgr::sweep() {
 					g->deleteOutput(gateList[i]);
 				}
 			}
+		}
+	}
+	for (unsigned i = 0, n = gateList.size(); i < n; ++i) {
+		if (gateList[i] != 0 && gateList[i]->flag == false 
+				&& (gateList[i]->isAig() || gateList[i]->getType() == UNDEF_GATE)) {
 			if (gateList[i]->isAig())	--ands;
 			cout << "Sweeping: " + gateList[i]->getTypeStr() + '('
 				<< gateList[i]->getGateId() << ") removed...\n";

@@ -164,6 +164,29 @@ void CirGate::printAig(string& s, unsigned& cnt) const {
 	}
 }
 
+unsigned CirGate::printAig(vector<string>* input_gates, vector<string>* in_names, vector<string>* and_gates) const {
+	if (flag || gateType == CONST_GATE)	return gateId;
+	flag = true;
+	if (gateType == PI_GATE) {
+		if (symbol != "")
+			in_names->push_back("i" + unsToStr(input_gates->size()) + ' ' + symbol);
+		input_gates->push_back(unsToStr(2 * gateId));
+		return gateId;
+	}
+	else if (gateType == AIG_GATE) {
+		unsigned var1 = getInput(0)->printAig(input_gates, in_names, and_gates),
+					var2 = getInput(1)->printAig(input_gates, in_names, and_gates);
+		if (var2 > var1)	var1 = var2;
+		and_gates->push_back(unsToStr(2 * gateId) + ' ' + 
+				unsToStr(2 * getInput(0)->getGateId() + isInv(0)) + ' ' + 
+				unsToStr(2 * getInput(1)->getGateId() + isInv(1)));
+		if (gateId < var1)	return var1;
+		return gateId;
+	}
+	cout << "printAig error, typeStr: " + getTypeStr() << endl;
+	return gateId;
+}
+
 void CirGate::deleteInput(size_t i) {
 	inputs.erase(inputs.begin() + i);
 }

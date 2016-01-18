@@ -419,11 +419,31 @@ void CirMgr::writeAag(ostream& outfile) const {
     	if (getGate(i) == 0 || getGate(i)->getSymbol() == "") continue;
     	outfile << 'o' << i - vars - 1<< ' ' << getGate(i)->getSymbol() << '\n';
   	}
-  	outfile << "c\n" << "AAG output by Harvey Yang\n";
+  	outfile << "c\nAAG output by Harvey Yang\n";
 }
 
 void CirMgr::writeGate(ostream& outfile, CirGate *g) const {
-  
+	vector<string> *input_gates	= new vector<string>(),
+						*in_names		= new vector<string>(),
+						*and_gates		= new vector<string>();
+
+	unsigned vars = g->printAig(input_gates, in_names, and_gates);
+	resetFlag();
+
+	outfile << "aag " << vars << ' ' << input_gates->size() << " 0 1 " << and_gates->size() << '\n';
+	for (unsigned i = 0, size = input_gates->size(); i < size; ++i)
+		outfile << (*input_gates)[i] << '\n';
+	
+	outfile << 2 * g->getGateId() << '\n';
+
+	for (unsigned i = 0, size = and_gates->size(); i < size; ++i)
+		outfile << (*and_gates)[i] << '\n';
+	for (unsigned i = 0, size = in_names->size(); i < size; ++i)
+		outfile << (*in_names)[i] << '\n';
+
+	outfile << "c\nAAG output by Harvey Yang\n";
+	input_gates->clear();	in_names->clear();	and_gates->clear();
+	delete input_gates;		delete in_names;		delete and_gates;
 }
 
 CirGate* CirMgr::createUndef(unsigned gid) {
